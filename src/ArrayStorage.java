@@ -1,30 +1,54 @@
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
+  private Resume[] storage = new Resume[10];
+  private int size = 0;
 
-    void clear() {
-    }
+  public void clear() {
+    Arrays.fill(storage, 0, size, null);
+    size = 0;
+  }
 
-    void save(Resume r) {
-    }
+  public void save(Resume r) {
+    storage[size] = r;
+    size++;
+  }
 
-    Resume get(String uuid) {
-        return null;
+  public Resume get(String uuid) {
+    for (int i = 0; i < size; i++) {
+      if (uuid.equals(storage[i].getUuid())) {
+        return storage[i];
+      }
     }
+    return null;
+  }
 
-    void delete(String uuid) {
+  public void delete(String uuid) {
+    for (int i = 0; i < size; i++) {
+      if (storage[i].getUuid().equals(uuid)) {
+        storage[i] = null;
+        size--;
+      }
     }
+    storage = Arrays.stream(storage).filter(Objects::nonNull).toArray(Resume[]::new);
+  }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    Resume[] getAll() {
-        return new Resume[0];
+  /**
+   * @return array, contains only Resumes in storage (without null)
+   */
+  public Resume[] getAll() {
+    Resume[] notNullResume = new Resume[size];
+    for (int i = 0; i < size; i++) {
+      notNullResume[i] = storage[i];
     }
+    return notNullResume;
+  }
 
-    int size() {
-        return 0;
-    }
+  public int size() {
+    return size;
+  }
 }
