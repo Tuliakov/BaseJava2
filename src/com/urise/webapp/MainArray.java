@@ -1,9 +1,14 @@
+package com.urise.webapp;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.ArrayStorage;
+
 /**
- * Interactive test for ArrayStorage implementation
+ * Interactive test for com.urise.webapp.storage.ArrayStorage implementation
  * (just run, no need to understand)
  */
 public class MainArray {
@@ -13,7 +18,7 @@ public class MainArray {
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     Resume r;
     while (true) {
-      System.out.print("Введите одну из команд - (list | size | save uuid | delete uuid | get uuid | clear | exit): ");
+      System.out.print("Введите одну из команд - (list | size | save uuid | delete uuid | get uuid | clear | update uuid | exit): ");
       String[] params = reader.readLine().trim().toLowerCase().split(" ");
       if (params.length < 1 || params.length > 2) {
         System.out.println("Неверная команда.");
@@ -46,6 +51,11 @@ public class MainArray {
         case "clear":
           ARRAY_STORAGE.clear();
           printAll();
+          break;
+        case "update uuid":
+          Resume resume = new Resume();
+          resume.setUuid(uuid);
+          ARRAY_STORAGE.update(resume);
           break;
         case "exit":
           return;
