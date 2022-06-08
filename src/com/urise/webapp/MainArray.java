@@ -7,10 +7,6 @@ import java.io.InputStreamReader;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.ArrayStorage;
 
-/**
- * Interactive test for com.urise.webapp.storage.ArrayStorage implementation
- * (just run, no need to understand)
- */
 public class MainArray {
   private final static ArrayStorage ARRAY_STORAGE = new ArrayStorage();
 
