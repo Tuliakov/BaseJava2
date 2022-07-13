@@ -2,6 +2,9 @@ package com.urise.webapp.storage;
 
 import java.util.Arrays;
 
+import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.NotExistStorageException;
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 public abstract class AbstractArrayStorage implements Storage{
@@ -28,10 +31,9 @@ public abstract class AbstractArrayStorage implements Storage{
   public void update(Resume r) {
     int index = getIndex(r.getUuid());
     if (index < 0) {
-      System.out.println("Resume " + r.getUuid() + " not exist");
-    } else {
-      storage[index] = r;
+      throw new NotExistStorageException(r.getUuid());
     }
+    storage[index] = r;
   }
 
   public Resume[] getAll() {
@@ -40,40 +42,32 @@ public abstract class AbstractArrayStorage implements Storage{
 
   public void save(Resume r) {
     int index = getIndex(r.getUuid());
-    if (index >= 0) {
-      System.out.println("Resume " + r.getUuid() + " already exist");
-    } else if (size == STORAGE_LIMIT) {
-      System.out.println("Storage overflow");
-    } else {
+    if (index < 0) {
+      if (size == STORAGE_LIMIT) {
+        throw new StorageException("Storage overflow", r.getUuid());
+      }
       insertElement(r, index);
       size++;
+    } else {
+      throw new ExistStorageException(r.getUuid());
     }
   }
 
   public void delete(String uuid) {
     int index = getIndex(uuid);
     if (index < 0) {
-      System.out.println("Resume " + uuid + " not exist");
-    } else {
-      fillDeletedElement(index);
-      storage[size - 1] = null;
-      size--;
+      throw new NotExistStorageException(uuid);
     }
+    fillDeletedElement(index);
+    storage[size - 1] = null;
+    size--;
   }
 
   public Resume get(String uuid) {
-    if (uuid != null) {
-      if (findResumeIndex(uuid) != -1) {
-        System.out.println("Resume with uuid : " + uuid + " got!");
-        return storage[findResumeIndex(uuid)];
-      }
+    int index = getIndex(uuid);
+    if (index < 0) {
+      throw new NotExistStorageException(uuid);
     }
-    return null;
-  }
-
-  protected int findResumeIndex(String uuid) {
-    Resume searchKey = new Resume();
-    searchKey.setUuid(uuid);
-    return Arrays.binarySearch(storage, 0, size, searchKey);
+    return storage[index];
   }
 }
