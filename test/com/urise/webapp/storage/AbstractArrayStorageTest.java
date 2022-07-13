@@ -12,7 +12,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractArrayStorageTest {
-  private Storage storage = new ArrayStorage();
+  private final Storage storage;
   private static final String UUID_1 = "uuid1";
   private static final Resume RESUME_1 = new Resume(UUID_1);
 
