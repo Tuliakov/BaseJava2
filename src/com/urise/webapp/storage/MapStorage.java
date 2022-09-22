@@ -1,14 +1,15 @@
 package com.urise.webapp.storage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.urise.webapp.model.Resume;
 
 public class MapStorage extends AbstractStorage{
 
-  private final Map<String, Resume> map = new LinkedHashMap<>();
+  private Map<String, Resume> map = new HashMap<>();
 
   @Override
   protected String getSearchKey(String uuid) {
@@ -16,40 +17,35 @@ public class MapStorage extends AbstractStorage{
   }
 
   @Override
-  protected void doUpdate(Resume r, Object searchKey) {
-    map.put(searchKey.toString(), r);
+  protected void doUpdate(Resume r, Object uuid) {
+    map.put((String) uuid, r);
   }
 
   @Override
-  protected boolean isExist(Object searchKey) {
-    return map.containsKey(searchKey);
+  protected boolean isExist(Object uuid) {
+    return map.containsKey(uuid);
   }
-
   @Override
-  protected void doSave(Resume r, Object searchKey) {
-    map.put(searchKey.toString(), r);
+  protected void doSave(Resume r, Object uuid) {
+    map.put((String) uuid, r);
   }
-
   @Override
-  protected Resume doGet(Object searchKey) {
-    return map.get(searchKey.toString());
+  protected Resume doGet(Object uuid) {
+    return map.get((String) uuid);
   }
-
   @Override
-  protected void doDelete(Object searchKey) {
-    map.remove(searchKey.toString());
+  protected void doDelete(Object uuid) {
+    map.remove((String) uuid);
   }
-
   @Override
   public void clear() {
     map.clear();
   }
 
   @Override
-  public Resume[] getAll() {
-    return map.values().toArray(new Resume[0]);
+  public List<Resume> doCopyAll() {
+    return new ArrayList<>(map.values());
   }
-
   @Override
   public int size() {
     return map.size();

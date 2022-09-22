@@ -1,6 +1,7 @@
 package com.urise.webapp.storage;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
@@ -33,10 +34,10 @@ public abstract class AbstractArrayStorage extends AbstractStorage{
     storage[(Integer) index] = r;
   }
 
-  public Resume[] getAll() {
-    return Arrays.copyOfRange(storage, 0, size);
+  @Override
+  public List<Resume> doCopyAll() {
+    return Arrays.asList(Arrays.copyOfRange(storage, 0, size));
   }
-
   @Override
   protected void doSave(Resume r, Object index) {
     if (size == STORAGE_LIMIT) {
